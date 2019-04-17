@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel='stylesheet' href='style2.css'>
+    link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1018136/font-awesome.min.css'>
+</head>
+
+
+<body>
+
+
+    <div class="container-fluid outerwrap">
+        <header id="header">
+            <div class="row hcont">
+                <div class="col-xs-2" id="logo">
+                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1018136/moustache-clip.png"
+                        class="img-fluid logo" id="header-img" alt=""></div>
+                <div class="col-xs-10 title">
+                    <h1 id=title>Manly products for men only</h1>
+                </div>
+            </div>
+            <div id="navwrap">
+                <nav id="nav-bar">
+                    <a class="nav-link page-scroll" href="#about">about</a>
+                    <a class="nav-link page-scroll" href="#products">products</a>
+                    <a class="nav-link page-scroll" href="#contact">contact</a></nav>
+            </div>
+        </header>
+        <main>
+            <section id="about" class="anchor"></section>
+            <section id="aboutcontent">
+                <p class="intro">Are you a <span class="big">manly man</span>? Are you <span class="big">so manly</span>
+                    that you only consume products designed specifically to prop up your <span class="big">fragile
+                        masculinity</span>? Good news! There is an entire industry of marketers and product designers
+                    ready to pander to your every need!</p>
+            </section>
+            <section id="products" class="anchor"> </section>
+            <section id="productscontent">
+                <h2>Products</h2>
+                <ul class="cards">
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__image card__image--ds"></div>
+                            <div class="card__content">
+                                <div class="card__title">Dude Stick</div>
+                                <p class="card__text">Dude Stick serves the same function as any other lip balm. The key
+                                    difference is that it's <em>tactical as shit.</em> Just as chapstick provides a
+                                    protective barrier between your lips and the elements, Dude Stick provides a
+                                    protective barrier between you and any hint of femininity.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__video">
+                                <div class="videoWrapper">
+                                    <iframe id="video" width="640" height="360"
+                                        src="https://www.youtube.com/embed/mY4QCIa3dVQ?rel=0&amp;showinfo=0"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            <div class="card__content">
+                                <div class="card__title">Dr. Pepper Ten</div>
+                                <p class="card__text">It's Not For Women. That's all I really have to say about it but
+                                    due to some CSS issues I have to add some more text here to get the card to size
+                                    correctly. Just watch the video. </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__image card__image--ml"></div>
+                            <div class="card__content">
+                                <div class="card__title">Man Lotion</div>
+                                <p class="card__text">Real men don't moisturize. Unless they use MAN LOTION, which real
+                                    men rub all over each other while looking at pictures of muscular workers with
+                                    sledgehammers.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__image card__image--at"></div>
+                            <div class="card__content">
+                                <div class="card__title">AXE Shower Tool</div>
+                                <p class="card__text">You can tell it's not a girly shower accessory because it's called
+                                    a <em>detailer</em>. Also it's made by Axe. Finally, it has a black rubber thingy
+                                    wrapped around it that is supposed to look like a tire, so: Tactical Grip.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__image card__image--dw"></div>
+                            <div class="card__content">
+                                <div class="card__title">Dude Wipes</div>
+                                <p class="card__text">Do you worry that others around you think you wipe like a girl? At
+                                    last a solution: the wipes that are clearly FOR DUDES ONLY.</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__image card__image--k"></div>
+                            <div class="card__content">
+                                <div class="card__title">Kleenex Mansize</div>
+                                <p class="card__text">Guys there is a 100% earnest <a
+                                        href="http://www.getmemedia.com/ideas/case-study-kleenex-mansize-theyre-here/smp.html"
+                                        target="_blank">evaluation of the marketing campaign for this product</a> in
+                                    which a real human man tells us that the key objective of the campaign was to
+                                    "…reassure shoppers that the actual tissue size and number had not changed; it was
+                                    only the box." (The box had to be made smaller to be more "discreet," because Real
+                                    Men do not have kleenex boxes lying around their houses? I guess?)</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <section id="contact"></section>
+            <section id="contactcontent">
+                <h2>Contact</h2>
+                <div class="ccon">
+                    <div class="formwrap">
+                        <p class="big">Join our fake mailing list!</p>
+                        <form id="form" method="post" action="https://www.freecodecamp.com/email-submit">
+                            <input id="email" name="email" placeholder="Email" type="email">
+                            <input id="submit" type="submit">
+                        </form>
+                    </div>
+                    <p id="disclaimer"><span class="big">DISCLAIMER:</span> None of the pictures and almost none of the
+                        words on this site belong to me, they were copied from other places on the Internet for this
+                        FreeCodeCamp project, mostly from buzzfeed and brobible.com.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>made with ♥ by dd, © 2019 </footer> 
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1018136/jquery.easing.min.js'></script>
+<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1018136/scrolling-nav.js'></script>
+<script src="https://static.codepen.io/assets/editor/live/css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Technical documentation page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+    <nav id="navbar">
+
+        <header>ASP.NET Core fundamentals - Dependancy Injections</header>
+        <ul>
+                
+                  
+           <a class="nav-link" href="#Introduction"><li>Introduction</li></a>
+
+         <li> <a class="nav-link" href="#Overview">Overview</a> </li>
+
+            <a class="nav-link" href="#Framework_Provided_Services">
+                <li>Framework Provided Services</li>
+            </a>
+
+            <a class="nav-link" href="#Service_Lifetimes">
+                <li>Service Lifetimes</li>
+            </a>
+
+            <a class="nav-link" href="#Entity_Framework_Contexts">
+                <li>Entity Framework Contexts</li>
+            </a>
+
+            <a class="nav-link" href="#Lifetime_And_Registration_Options">
+                <li>Lifetime And Registration Options</li>
+            </a>
+
+            <a class="nav-link" href="#Call_Services_From_Main">
+                <li>Call Services From Main</li>
+            </a>
+
+            <a class="nav-link" href="#Scope_Validation">
+                <li>Scope Validation</li>
+            </a>
+
+            <a class="nav-link" href="#Request_Services">
+                <li>Request Services</li>
+            </a>
+
+            <a class="nav-link" href="#Design_Services_For_Dependency_Injection">
+                <li>Design Services For Dependency Injection</li>
+            </a>
+
+            <a class="nav-link" href="#Default_Service_Container_Replacement">
+                <li>Default Service Container Replacement</li>
+            </a>
+
+            <a class="nav-link" href="#Reference">
+                <li>References</li>
+            </a>
+
+        </ul>
+    </nav>
+</div>
+
+    <main id="main-doc">
+
+        <section class="main-section" id="Introduction">
+
+            <header class="title">Introduction</header>
+
+            <article>
+                <p>ASP.NET Core is a cross-platform, high-performance, open-source framework for building modern,
+                    cloud-based,
+                    Internet-connected applications. With ASP.NET Core, you can:</p>
+
+                <li> Build web apps and services, IoT apps, and mobile backends.</li>
+                <li> Use your favorite development tools on Windows, macOS, and Linux.</li>
+                <li> Deploy to the cloud or on-premises.</li>
+                <li> Run on .NET Core or .NET Framework.</li>
+                <br><br>
+                ASP.NET Core provides the following <b>benefits:</b> <br><br>
+
+                - A unified story for building web UI and web APIs.<br>
+                - Architected for testability.<br>
+                - Razor Pages makes coding page-focused scenarios easier and more productive.<br>
+                - Ability to develop and run on Windows, macOS, and Linux.<br>
+                - Open-source and community-focused.<br>
+                - Integration of modern, client-side frameworks and development workflows.<br>
+                - A cloud-ready, environment-based configuration system.<br>
+                - Built-in dependency injection.<br>
+                - A lightweight, high-performance, and modular HTTP request pipeline.<br>
+                - Ability to host on IIS, Nginx, Apache, Docker, or self-host in your own process.<br>
+                - Side-by-side app versioning when targeting .NET Core.<br>
+                - Tooling that simplifies modern web development.<br>
+            </article>
+        </section>
+
+        <br>
+
+
+        <section class="main-section" id="Overview">
+            <header class="title">Overview</header>
+            <article>
+
+                ASP.NET Core supports the dependency injection (DI) software design pattern,
+                which is a technique for achieving Inversion of Control (IoC) between classes
+                and their dependencies. <br> <br>
+
+
+                A dependency is any object that another object requires. Examine the following <b>MyDependency class</b>
+                with a WriteMessage method that other classes in an app depend upon:
+                <p>
+                    <code>
+                        public class MyDependency
+                        {
+                        public MyDependency()
+                        {
+                        }
+
+                        public Task WriteMessage(string message)
+                        {
+                        Console.WriteLine(
+                        $"MyDependency.WriteMessage called. Message: {message}");
+
+                        return Task.FromResult(0);
+                        }
+                        }
+                    </code>
+                </p>
+
+                An instance of the MyDependency class can be created to make the WriteMessage
+                method available to a class. The MyDependency class is a dependency of the IndexModel class:
+                <p>
+                    <code>
+                        public class IndexModel : PageModel
+                        {
+                        MyDependency _dependency = new MyDependency();
+
+                        public async Task OnGetAsync()
+                        {
+                        await _dependency.WriteMessage(
+                        "IndexModel.OnGetAsync created this message.");
+                        }
+                        }
+                    </code>
+                </p>
+
+                The class creates and directly depends on the MyDependency instance.
+                Code dependencies (such as the previous example) are problematic and should be avoided for the following
+                reasons:
+
+                <li> To replace MyDependency with a different implementation, the class must be modified. </li>
+                <li> If MyDependency has dependencies, they must be configured by the class. In a large project with
+                    multiple classes depending on MyDependency, the configuration code becomes scattered across the app.
+                </li>
+                <li> This implementation is difficult to unit test. The app should use a mock or stub MyDependency
+                    class, which isn't possible with this approach.
+                </li>
+
+                <blockquote> Each services.Add{SERVICE_NAME} extension method adds (and potentially configures)
+                    services.
+                    For example, services.AddMvc() adds the services Razor Pages and MVC require. We recommended that
+                    apps
+                    follow this convention. Place extension methods in the Microsoft.Extensions.DependencyInjection
+                    namespace
+                    to encapsulate groups of service registrations. </blockquote>
+
+                If the service's constructor requires a built in type, such as a string, the type can be injected by
+                using configuration or the options pattern:
+
+                <p> <code> public class MyDependency : IMyDependency
+                        {
+                        public MyDependency(IConfiguration config)
+                        {
+                        var myStringValue = config["MyStringKey"];
+
+                        // Use myStringValue
+                        }
+
+                        ...
+                        }</code></p>
+
+                An instance of the service is requested via the constructor of a class where the service is used and
+                assigned
+                to a private field. The field is used to access the service as necessary throughout the class.<br>
+
+                In the sample app, the IMyDependency instance is requested and used to call the service's WriteMessage
+                method:
+
+                <p>
+                    <code>
+                        public class IndexModel : PageModel
+                        {
+                        private readonly IMyDependency _myDependency;
+
+                        public IndexModel(
+                        IMyDependency myDependency,
+                        OperationService operationService,
+                        IOperationTransient transientOperation,
+                        IOperationScoped scopedOperation,
+                        IOperationSingleton singletonOperation,
+                        IOperationSingletonInstance singletonInstanceOperation)
+                        {
+                        _myDependency = myDependency;
+                        OperationService = operationService;
+                        TransientOperation = transientOperation;
+                        ScopedOperation = scopedOperation;
+                        SingletonOperation = singletonOperation;
+                        SingletonInstanceOperation = singletonInstanceOperation;
+                        }
+
+                        public OperationService OperationService { get; }
+                        public IOperationTransient TransientOperation { get; }
+                        public IOperationScoped ScopedOperation { get; }
+                        public IOperationSingleton SingletonOperation { get; }
+                        public IOperationSingletonInstance SingletonInstanceOperation { get; }
+
+                        public async Task OnGetAsync()
+                        {
+                        await _myDependency.WriteMessage(
+                        "IndexModel.OnGetAsync created this message.");
+                        }
+                        }</code>
+                </p>
+            </article>
+        </section>
+
+
+        <br>
+
+        <section class="main-section" id="Framework_Provided_Services">
+            <header class="title">Framework Provided Services</header>
+            <article>
+                The Startup.ConfigureServices method is responsible for defining the services the app uses,
+                including platform features, such as Entity Framework Core and ASP.NET Core MVC. Initially,
+                the IServiceCollection provided to ConfigureServices has the following services defined
+                (depending on how the host was configured): <br><br>
+
+                <table>
+                    <tr>
+                        <th>Service type</th>
+                        <th>Lifetime</th>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.AspNetCore.Hosting.Builder.IApplicationBuilderFactory</td>
+                        <td>Transient</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.AspNetCore.Hosting.IApplicationLifetime</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.AspNetCore.Hosting.IHostingEnvironment</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.AspNetCore.Hosting.IStartup</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.AspNetCore.Hosting.IStartupFilter</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.AspNetCore.Hosting.Server.IServer</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.Extensions.Logging.ILoggerFactory</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.Extensions.ObjectPool.ObjectPoolProvider</td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft.Extensions.Options.IConfigureOptions<T>
+                        </td>
+                        <td>Singleton</td>
+                    </tr>
+                    <tr>
+                        <td>System.Diagnostics.DiagnosticSource</td>
+                        <td>Singleton</td>
+                    </tr>
+                </table>
+
+                <br><br>
+                When a service collection extension method is available to register a service
+                (and its dependent services, if required), the convention is to use a single
+                Add{SERVICE_NAME} extension method to register all of the services required by
+                that service. The following code is an example of how to add additional services
+                to the container using the extension methods AddDbContext, AddIdentity, and AddMvc:
+
+                <p>
+                    <code>
+                        public void ConfigureServices(IServiceCollection services)
+                        {
+                        services.AddDbContext<ApplicationDbContext>(options =>
+                            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+                            services.AddIdentity<ApplicationUser, IdentityRole>()
+                                .AddEntityFrameworkStores<ApplicationDbContext>()
+                                    .AddDefaultTokenProviders();
+
+                                    services.AddMvc();
+                                    }
+                    </code>
+                </p>
+            </article>
+        </section>
+
+        <br>
+
+
+        <section class="main-section" id="Service_Lifetimes">
+            <header class="title">Service Lifetimes</header>
+            <article>
+                Choose an appropriate lifetime for each registered service.
+                ASP.NET Core services can be configured with the following lifetimes: <br>
+                <li> Transient</li>
+                Transient lifetime services are created each time they're requested from the service container.
+                This lifetime works best for lightweight, stateless services.
+                <li> Scoped</li>
+                Scoped lifetime services are created once per client request (connection).
+                <li> Singleton</li>
+                Singleton lifetime services are created the first time they're requested (or when ConfigureServices
+                is run and an instance is specified with the service registration). Every subsequent request uses
+                the same instance. If the app requires singleton behavior, allowing the service container to manage
+                the service's lifetime is recommended. Don't implement the singleton design pattern and provide user
+                code to manage the object's lifetime in the class.
+
+                <br><br>
+                <b> Constructor injection behavior</b>
+                Services can be resolved by two mechanisms:
+                <li>
+                    IServiceProvider
+                </li>
+                <li>
+                    ActivatorUtilities – Permits object creation without service registration in the
+                    dependency injection container. ActivatorUtilities is used with user-facing abstractions,
+                    such as Tag Helpers, MVC controllers, and model binders.
+                </li> <br><br>
+                Constructors can accept arguments that aren't provided by dependency injection,
+                but the arguments must assign default values. <br>
+                When services are resolved by IServiceProvider or ActivatorUtilities,
+                constructor injection requires a public constructor.<br>
+            </article>
+        </section>
+
+        <br>
+
+        <section class="main-section" id="Entity_Framework_Contexts">
+            <header class="title">Entity Framework Contexts</header>
+            <article>
+                <p>
+                    Entity Framework contexts are usually added to the service container using the scoped lifetime
+                    because
+                    web app database operations are normally scoped to the client request. The default lifetime is
+                    scoped if
+                    a lifetime isn't specified by an AddDbContext<TContext> overload when registering the database
+                        context.
+                        Services of a given lifetime shouldn't use a database context with a shorter lifetime than the
+                        service.
+                </p>
+            </article>
+        </section>
+
+        <br>
+
+        <section class="main-section" id="Lifetime_And_Registration_Options">
+            <header class="title">Lifetime And Registration Options</header>
+            <article>
+                <p>To demonstrate the difference between the lifetime and registration options, consider the following
+                    interfaces that represent tasks as an operation with a unique identifier, OperationId. Depending on
+                    how the lifetime of an operations service is configured for the following interfaces, the container
+                    provides either the same or a different instance of the service when requested by a class:
+
+                    <code> public interface IOperation
+                        {
+                        Guid OperationId { get; }
+                        }
+
+                        public interface IOperationTransient : IOperation
+                        {
+                        }
+
+                        public interface IOperationScoped : IOperation
+                        {
+                        }
+
+                        public interface IOperationSingleton : IOperation
+                        {
+                        }
+
+                        public interface IOperationSingletonInstance : IOperation
+                        {
+                        }</code>
+
+                    The interfaces are implemented in the Operation class. <br>
+                    The Operation constructor generates a GUID if one isn't supplied:
+
+                    <code>
+                        public class Operation : IOperationTransient,
+                        IOperationScoped,
+                        IOperationSingleton,
+                        IOperationSingletonInstance
+                        {
+                        public Operation() : this(Guid.NewGuid())
+                        {
+                        }
+
+                        public Operation(Guid id)
+                        {
+                        OperationId = id;
+                        }
+
+                        public Guid OperationId { get; private set; }
+                        }</code>
+
+                    An OperationService is registered that depends on each of the other Operation types.
+                    When OperationService is requested via dependency injection, it receives either a new
+                    instance of each service or an existing instance based on the lifetime of the dependent service.
+                    <br>
+                    <li> When transient services are created when requested from the container, the OperationId of
+                        the IOperationTransient service is different than the OperationId of the OperationService.
+                        OperationService receives a new instance of the IOperationTransient class. The new instance
+                        yields a different OperationId.</li>
+
+                    <code>
+                        public class OperationService
+                        {
+                        public OperationService(
+                        IOperationTransient transientOperation,
+                        IOperationScoped scopedOperation,
+                        IOperationSingleton singletonOperation,
+                        IOperationSingletonInstance instanceOperation)
+                        {
+                        TransientOperation = transientOperation;
+                        ScopedOperation = scopedOperation;
+                        SingletonOperation = singletonOperation;
+                        SingletonInstanceOperation = instanceOperation;
+                        }
+
+                        public IOperationTransient TransientOperation { get; }
+                        public IOperationScoped ScopedOperation { get; }
+                        public IOperationSingleton SingletonOperation { get; }
+                        public IOperationSingletonInstance SingletonInstanceOperation { get; }
+                        }
+                    </code>
+                </p>
+            </article>
+        </section>
+
+        <br>
+
+        <section class="main-section" id="Call_Services_From_Main">
+            <header class="title">Call Services From Main</header>
+            <article>
+                <p>
+                    Create an IServiceScope with IServiceScopeFactory.CreateScope to resolve a scoped service
+                    within the app's scope. This approach is useful to access a scoped service at startup to run
+                    initialization tasks. The following example shows how to obtain a context for the MyScopedService
+                    in Program.Main: <br>
+                    <code>
+                        public static void Main(string[] args)
+                        {
+                        var host = CreateWebHostBuilder(args).Build();
+
+                        using (var serviceScope = host.Services.CreateScope())
+                        {
+                        var services = serviceScope.ServiceProvider;
+
+                        try
+                        {
+                        var serviceContext = services.GetRequiredService<MyScopedService>();
+                            // Use the context here
+                            }
+                            catch (Exception ex)
+                            {
+                            var logger = services.GetRequiredService<ILogger<Program>>();
+                                logger.LogError(ex, "An error occurred.");
+                                }
+                                }
+
+                                host.Run();
+                                }</code></p>
+            </article>
+        </section>
+
+        <br>
+
+        <section class="main-section" id="Scope_Validation">
+            <header class="title">Scope Validation</header>
+            <article>
+                <p> When the app is running in the Development environment, the default service provider performs checks
+                    to verify that:
+                    <li>
+                        Scoped services aren't directly or indirectly resolved from the root service provider.
+                    </li>
+                    <li> Scoped services aren't directly or indirectly injected into singletons.</li>
+                    <br>
+                    The root service provider is created when BuildServiceProvider is called. The root service
+                    provider's
+                    lifetime corresponds to the app/server's lifetime when the provider starts with the app and is
+                    disposed
+                    when the app shuts down. <br><br>
+                    Scoped services are disposed by the container that created them. If a scoped service is created in
+                    the
+                    root container, the service's lifetime is effectively promoted to singleton because it's only
+                    disposed
+                    by the root container when app/server is shut down. Validating service scopes catches these
+                    situations
+                    when BuildServiceProvider is called.
+                </p>
+            </article>
+        </section>
+
+        <br>
+
+
+        <section class="main-section" id="Request_Services">
+            <header class="title">Request Services</header>
+            <article>
+
+                <p>
+                    The services available within an ASP.NET Core request from HttpContext are exposed through the
+                    HttpContext.
+                    RequestServices collection. <br> <br>
+
+                    Request Services represent the services configured and requested as part of the app. When the
+                    objects
+                    specify dependencies, these are satisfied by the types found in RequestServices, not
+                    ApplicationServices.<br> <br>
+
+                    Generally, the app shouldn't use these properties directly. Instead, request the types that
+                    classes require via class constructors and allow the framework inject the dependencies. This yields
+                    classes
+                    that are easier to test.<br> <br>
+                </p>
+
+                <blockquote> Prefer requesting dependencies as constructor parameters to accessing the RequestServices
+                    collection. </blockquote>
+            </article>
+        </section>
+
+        <br>
+
+
+        <section class="main-section" id="Design_Services_For_Dependency_Injection">
+            <header class="title">Design Services For Dependency Injection </header>
+            <article>
+                <p>
+                    Best practices are to:
+                    <li>Design services to use dependency injection to obtain their dependencies.</li>
+                    <li>Avoid stateful, static method calls.</li>
+                    <li>Avoid direct instantiation of dependent classes within services. Direct instantiation couples
+                        the code to a particular implementation.</li>
+                    <li>Make app classes small, well-factored, and easily tested.</li>
+                    <br><br>
+
+                    If a class seems to have too many injected dependencies, this is generally a sign that
+                    the class has too many responsibilities and is violating the Single Responsibility
+                    Principle (SRP). Attempt to refactor the class by moving some of its responsibilities
+                    into a new class. Keep in mind that Razor Pages page model classes and MVC controller
+                    classes should focus on UI concerns. Business rules and data access implementation details
+                    should be kept in classes appropriate to these separate concerns. <br> <br>
+
+                    <b>Disposal of services
+                    </b><br>
+                    The container calls Dispose for the IDisposable types it creates. If an instance is added
+                    to the container by user code, it isn't disposed automatically.
+
+                    <code>
+                        // Services that implement IDisposable:
+                        public class Service1 : IDisposable {}
+                        public class Service2 : IDisposable {}
+                        public class Service3 : IDisposable {}
+
+                        public interface ISomeService {}
+                        public class SomeServiceImplementation : ISomeService, IDisposable {}
+
+                        public void ConfigureServices(IServiceCollection services)
+                        {
+                        // The container creates the following instances and disposes them automatically:
+                        services.AddScoped<Service1>();
+                            services.AddSingleton<Service2>();
+                                services.AddSingleton<ISomeService>(sp => new SomeServiceImplementation());
+
+                                    // The container doesn't create the following instances, so it doesn't dispose of
+                                    // the instances automatically:
+                                    services.AddSingleton<Service3>(new Service3());
+                                        services.AddSingleton(new Service3());
+                                        }
+                    </code>
+                </p>
+            </article>
+        </section>
+
+        <br>
+
+        <section class="main-section" id="Default_Service_Container_Replacement">
+            <header class="title">Default Service Container Replacement</header>
+            <article>
+                <p>
+                    The built-in service container is meant to serve the needs of the framework and most
+                    consumer apps. We recommend using the built-in container unless you need a specific feature
+                    that it doesn't support. Some of the features supported in 3rd party containers not found in
+                    the built-in container: <br>
+                    <li> Property injection</li>
+                    <li> Injection based on name</li>
+                    <li> Child containers</li>
+                    <li> Custom lifetime management</li>
+                    <li> Func<T> support for lazy initialization</li>
+                </p>
+            </article>
+        </section>
+
+        <br>
+
+        <section class="main-section" id="Reference">
+            <header class="title">Reference</header>
+            <article>
+                <li>All the documentation in this page is taken from <a
+                        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank">MDN</a>
+            </article>
+        </section>
+
+    </main>
+
+    <script src='https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js'></script>
+</body>
+
+</html>
