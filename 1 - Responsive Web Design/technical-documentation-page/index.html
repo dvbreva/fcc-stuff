@@ -5,72 +5,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Technical documentation page</title>
+    <title>Document</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-
-    <nav id="navbar">
-
-        <header>ASP.NET Core fundamentals - Dependancy Injections</header>
+<div id="wrapper">
+    <nav id="navbar" class="nav-bar relative column">
+        <header> Dependancy Injections Fundamentals</header>
+        <div class="navlinks">
         <ul>
-                
-                  
-           <a class="nav-link" href="#Introduction"><li>Introduction</li></a>
-
-         <li> <a class="nav-link" href="#Overview">Overview</a> </li>
-
-            <a class="nav-link" href="#Framework_Provided_Services">
-                <li>Framework Provided Services</li>
+            <a class="nav-link" href="#Introduction" rel="internal">
+                <li>Introduction</li>
             </a>
 
-            <a class="nav-link" href="#Service_Lifetimes">
-                <li>Service Lifetimes</li>
+            <a class="nav-link" href="#Overview" rel="internal">
+                <li>Overview</li>
+            </a>
+           
+            <a class="nav-link" href="#Framework_provided_services" rel="internal">
+                <li>Framework_provided_services</li>
+            </a>
+            <a class="nav-link" href="#Service_lifetimes" rel="internal">
+                <li>Service_lifetimes</li>
+            </a>
+            <a class="nav-link" href="#Entity_framework_contexts" rel="internal">
+                <li>Entity_framework_contexts</li>
+            </a>
+            <a class="nav-link" href="#Lifetime_and_registration_options" rel="internal">
+                <li>Lifetime_and_registration_options</li>
+            </a>
+            <a class="nav-link" href="#Call_services_from_main" rel="internal">
+                <li>Call_services_from_main</li>
+            </a>
+            <a class="nav-link" href="#Scope_validation" rel="internal">
+                <li>Scope_validation</li>
+            </a>
+         
+            <a class="nav-link" href="#Request_services" rel="internal">
+                <li>Request_services</li>
+            </a>
+           
+           
+            <a class="nav-link" href="#Design_services_for_dependency_injection" rel="internal">
+                <li>Design_services_for_dependency_injection</li>
+            </a>
+            <a class="nav-link" href="#Default_service_container_replacement" rel="internal">
+                <li>Default_service_container_replacement</li>
             </a>
 
-            <a class="nav-link" href="#Entity_Framework_Contexts">
-                <li>Entity Framework Contexts</li>
-            </a>
-
-            <a class="nav-link" href="#Lifetime_And_Registration_Options">
-                <li>Lifetime And Registration Options</li>
-            </a>
-
-            <a class="nav-link" href="#Call_Services_From_Main">
-                <li>Call Services From Main</li>
-            </a>
-
-            <a class="nav-link" href="#Scope_Validation">
-                <li>Scope Validation</li>
-            </a>
-
-            <a class="nav-link" href="#Request_Services">
-                <li>Request Services</li>
-            </a>
-
-            <a class="nav-link" href="#Design_Services_For_Dependency_Injection">
-                <li>Design Services For Dependency Injection</li>
-            </a>
-
-            <a class="nav-link" href="#Default_Service_Container_Replacement">
-                <li>Default Service Container Replacement</li>
-            </a>
-
-            <a class="nav-link" href="#Reference">
+            <a class="nav-link" href="#References" rel="internal">
                 <li>References</li>
             </a>
-
+           
         </ul>
+    </div>
     </nav>
-</div>
 
     <main id="main-doc">
-
+      
         <section class="main-section" id="Introduction">
-
-            <header class="title">Introduction</header>
-
+            <header>Introduction</header>
             <article>
                 <p>ASP.NET Core is a cross-platform, high-performance, open-source framework for building modern,
                     cloud-based,
@@ -98,11 +93,10 @@
             </article>
         </section>
 
-        <br>
-
+        </section>
 
         <section class="main-section" id="Overview">
-            <header class="title">Overview</header>
+            <header>Overview</header>
             <article>
 
                 ASP.NET Core supports the dependency injection (DI) software design pattern,
@@ -228,11 +222,8 @@
             </article>
         </section>
 
-
-        <br>
-
-        <section class="main-section" id="Framework_Provided_Services">
-            <header class="title">Framework Provided Services</header>
+        <section class="main-section" id="Framework_provided_services">
+            <header>Framework_provided_services</header>
             <article>
                 The Startup.ConfigureServices method is responsible for defining the services the app uses,
                 including platform features, such as Entity Framework Core and ASP.NET Core MVC. Initially,
@@ -312,11 +303,8 @@
             </article>
         </section>
 
-        <br>
-
-
-        <section class="main-section" id="Service_Lifetimes">
-            <header class="title">Service Lifetimes</header>
+        <section class="main-section" id="Service_lifetimes">
+            <header>Service_lifetimes</header>
             <article>
                 Choose an appropriate lifetime for each registered service.
                 ASP.NET Core services can be configured with the following lifetimes: <br>
@@ -350,10 +338,8 @@
             </article>
         </section>
 
-        <br>
-
-        <section class="main-section" id="Entity_Framework_Contexts">
-            <header class="title">Entity Framework Contexts</header>
+        <section class="main-section" id="Entity_framework_contexts">
+            <header>Entity_framework_contexts</header>
             <article>
                 <p>
                     Entity Framework contexts are usually added to the service container using the scoped lifetime
@@ -368,10 +354,8 @@
             </article>
         </section>
 
-        <br>
-
-        <section class="main-section" id="Lifetime_And_Registration_Options">
-            <header class="title">Lifetime And Registration Options</header>
+        <section class="main-section" id="Lifetime_and_registration_options">
+            <header>Lifetime_and_registration_options</header>
             <article>
                 <p>To demonstrate the difference between the lifetime and registration options, consider the following
                     interfaces that represent tasks as an operation with a unique identifier, OperationId. Depending on
@@ -454,10 +438,8 @@
             </article>
         </section>
 
-        <br>
-
-        <section class="main-section" id="Call_Services_From_Main">
-            <header class="title">Call Services From Main</header>
+        <section class="main-section" id="Call_services_from_main">
+            <header>Call_services_from_main</header>
             <article>
                 <p>
                     Create an IServiceScope with IServiceScopeFactory.CreateScope to resolve a scoped service
@@ -490,10 +472,8 @@
             </article>
         </section>
 
-        <br>
-
-        <section class="main-section" id="Scope_Validation">
-            <header class="title">Scope Validation</header>
+        <section class="main-section" id="Scope_validation">
+            <header>Scope_validation</header>
             <article>
                 <p> When the app is running in the Development environment, the default service provider performs checks
                     to verify that:
@@ -518,13 +498,9 @@
             </article>
         </section>
 
-        <br>
-
-
-        <section class="main-section" id="Request_Services">
-            <header class="title">Request Services</header>
+        <section class="main-section" id="Request_services">
+            <header>Request_services</header>
             <article>
-
                 <p>
                     The services available within an ASP.NET Core request from HttpContext are exposed through the
                     HttpContext.
@@ -546,14 +522,10 @@
             </article>
         </section>
 
-        <br>
-
-
-        <section class="main-section" id="Design_Services_For_Dependency_Injection">
-            <header class="title">Design Services For Dependency Injection </header>
+        <section class="main-section" id="Design_services_for_dependency_injection">
+            <header>Design_services_for_dependency_injection</header>
             <article>
-                <p>
-                    Best practices are to:
+                Best practices are to:
                     <li>Design services to use dependency injection to obtain their dependencies.</li>
                     <li>Avoid stateful, static method calls.</li>
                     <li>Avoid direct instantiation of dependent classes within services. Direct instantiation couples
@@ -589,7 +561,8 @@
                             services.AddSingleton<Service2>();
                                 services.AddSingleton<ISomeService>(sp => new SomeServiceImplementation());
 
-                                    // The container doesn't create the following instances, so it doesn't dispose of
+                                    // The container doesn't create the following instances, 
+                                    // so it doesn't dispose of
                                     // the instances automatically:
                                     services.AddSingleton<Service3>(new Service3());
                                         services.AddSingleton(new Service3());
@@ -599,13 +572,10 @@
             </article>
         </section>
 
-        <br>
-
-        <section class="main-section" id="Default_Service_Container_Replacement">
-            <header class="title">Default Service Container Replacement</header>
+        <section class="main-section" id="Default_service_container_replacement">
+            <header>Default_service_container_replacement</header>
             <article>
-                <p>
-                    The built-in service container is meant to serve the needs of the framework and most
+                <p>  The built-in service container is meant to serve the needs of the framework and most
                     consumer apps. We recommend using the built-in container unless you need a specific feature
                     that it doesn't support. Some of the features supported in 3rd party containers not found in
                     the built-in container: <br>
@@ -613,23 +583,20 @@
                     <li> Injection based on name</li>
                     <li> Child containers</li>
                     <li> Custom lifetime management</li>
-                    <li> Func<T> support for lazy initialization</li>
-                </p>
+                    <li> Func<T> support for lazy initialization</li> </p>
             </article>
         </section>
 
-        <br>
-
-        <section class="main-section" id="Reference">
-            <header class="title">Reference</header>
+        <section class="main-section" id="References">
+            <header>References</header>
             <article>
-                <li>All the documentation in this page is taken from <a
-                        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank">MDN</a>
+                <p>  <li>All the documentation in this page is taken from <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank">MDN</a> </p>
             </article>
         </section>
 
     </main>
-
+</div>
     <script src='https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js'></script>
 </body>
 
